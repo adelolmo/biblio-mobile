@@ -28,8 +28,10 @@
         * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
             * Enable inline JS: add 'unsafe-inline' to default-src
     -->
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <!--<meta http-equiv="Content-Security-Policy"-->
+          <!--content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' bibliorest-adoorg.rhcloud.com">-->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 192.168.178.29">-->
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport"
@@ -43,22 +45,62 @@
 <body>
 <div data-role="page">
         
-    <div data-role="header" data-position="fixed">
-              <h1>Hello World #5 - jQuery Mobile Version</h1>
-            
+    <div data-role="header" style="overflow:hidden;" data-position="fixed">
+        <h1>Biblio</h1>   
+        <a href="#" data-icon="search" class="ui-btn-right">Search</a>
+          
+        <!--        <form>
+                    <label for="search-1">Search:</label>
+                    <input name="search-1" id="search-1" value="" type="search">
+                </form>-->
     </div>
         
     <div data-role="content">
-              <p>This is a Cordova application that makes calls to the Cordova Device API.</p>
-              <h3>Device API Properties</h3>
+        <table data-role="table" id="table-custom-2" data-mode="columntoggle"
+               class="ui-body-d ui-shadow table-stripe ui-responsive" data-column-btn-theme="b"
+               data-column-btn-text="Columns to display..." data-column-popup-theme="a">
+            <thead>
+            <tr class="ui-bar-d">
+                <th data-priority="2">Rank</th>
+                <th>Movie Title</th>
+                <th data-priority="3">Year</th>
+                <th data-priority="1"><abbr title="Rotten Tomato Rating">Rating</abbr></th>
+                <th data-priority="5">Reviews</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>1</th>
+                <td><a href="http://en.wikipedia.org/wiki/Citizen_Kane" data-rel="external">Citizen Kane</a></td>
+                <td>1941</td>
+                <td>100%</td>
+                <td>74</td>
+            </tr>
+            <tr>
+                <th>2</th>
+                <td><a href="http://en.wikipedia.org/wiki/Casablanca_(film)" data-rel="external">Casablanca</a></td>
+                <td>1942</td>
+                <td>97%</td>
+                <td>64</td>
+            </tr>
+            <tr>
+                <th>3</th>
+                <td><a href="http://en.wikipedia.org/wiki/The_Godfather" data-rel="external">The Godfather</a></td>
+                <td>1972</td>
+                <td>97%</td>
+                <td>87</td>
+            </tr>
+            </tbody>
+        </table>
               
-        <ul data-role="listview" id="devInfo"></ul>
+        <ul data-role="listview" id="bookList"></ul>
             
     </div>
         
     <div data-role="footer" data-position="fixed">
-              <h1>Apache Cordova 4 Programming</h1>
+        <button id="add" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-plus">New</button>
             
+        <button id="scan" class="ui-btn ui-shadow ui-corner-all ui-btn-icon-left ui-icon-camera">Scan</button>
     </div>
       
 </div>
