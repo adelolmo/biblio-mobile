@@ -16,7 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+//var serverUrl = "http://bibliorest-adoorg.rhcloud.com";
+var serverUrl = "http://192.168.178.29:8080";
+var scannedBookResource;
+
 var app = {
+
     initialize: function () {
         this.bindEvents();
     },
@@ -31,12 +36,39 @@ var app = {
             app.scanBook();
         });
         $("#add").click(function () {
-            app.sendBook('11', 'theF');
+            window.location.href = '#scannedBook';
+        });
+        $("#cancelScannedBook").click(function () {
+            $('tr:last').remove();
+            window.location.href = '#books';
+            app.deleteRequest(scannedBookResource);
+        });
+        $("#addScannedBook").click(function () {
+            window.location.href = '#books';
+        });
+        $("#returnDetailBook").click(function () {
+            window.location.href = '#books';
         });
 
-        $.getJSON("http://bibliorest-adoorg.rhcloud.com/books",
-            function (data) {
+        app.getRequest("/books", function (data) {
+            $table = $('tbody');
+            $.each(data, function (i, item) {
+                app.addBookToTable($table, item);
+            })
+        });
+        $("#table-custom-2").find("tbody").delegate("tr", "click", function () {
+            app.navigateBookDetail($(this).attr("id"));
+        });
 
+    },
+
+    navigateBookDetail: function (bookId) {
+        app.getBook(bookId,
+            function (data) {
+                window.location.href = '#detailBook';
+                $('#detailTitle').html('Title: ' + data.title);
+                $('#detailAuthor').html('Author: ' + data.author);
+                $('#detailImage').attr('src', data.imageUrl);
             })
     },
 
@@ -55,7 +87,18 @@ var app = {
         cordova.plugins.barcodeScanner.scan(
             function (result) {
                 if (!result.cancelled) {
-                    app.sendBook(result.text, result.format);
+                    app.sendBarCode(result.text, result.format,
+                        function (data) {
+                            screen.lockOrientation('portrait');
+
+                            window.location.href = '#scannedBook';
+                            $('#scannedTitle').html('Title: ' + data.title);
+                            $('#scannedAuthor').html('Author: ' + data.author);
+                            $('#scannedImage').attr('src', data.imageUrl);
+
+                            app.addBookToTable($('tbody'), data);
+                            screen.unlockOrientation();
+                        });
                 }
             },
 
@@ -65,27 +108,112 @@ var app = {
         );
     },
 
-    sendBook: function (isbn, format) {
-        console.log('sendBook isbn[' + isbn + '] format[' + format + ']');
-
-        app.postRequest("http://bibliorest-adoorg.rhcloud.com/books/" + isbn,
-            {format: format, code: "mockCode"});
+    getBook: function (bookId, onSuccessCallback) {
+        app.getRequest("/books/" + bookId,
+            function (data) {
+                if (onSuccessCallback) {
+                    onSuccessCallback(data);
+                }
+            })
     },
 
-    postRequest: function(resource, payload){
+    sendBarCode: function (isbn, format, onSuccessCallback) {
+        console.log('sendBarCode isbn[' + isbn + '] format[' + format + ']');
+
+        app.postRequest("/barcode",
+            {isbn: isbn, format: format},
+            function (location, data) {
+                //alert("location: " + location + "  data: " + data);
+                scannedBookResource = location;
+
+                onSuccessCallback(data);
+            },
+            function (data) {
+                alert(data.error);
+            });
+    },
+
+    postRequest: function (resource, payload, onSuccessCallback, onErrorCallback) {
         $.ajax({
             type: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: resource,
-            //url: "http://192.168.178.29:8080/books/" + isbn,
+            url: serverUrl + resource,
             data: JSON.stringify(payload),
             error: function (xhr, status, error) {
-                alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
+                //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
+                if (onErrorCallback) {
+                    //var json = JSON.stringify(xhr.responseText);
+                    alert(xhr.responseText);
+                    onErrorCallback(xhr.responseText)
+                }
+            },
+            success: function (data, status, xhr) {
+                if (onSuccessCallback) {
+                    onSuccessCallback(xhr.getResponseHeader('Location'), data);
+                }
             }
         });
+    },
+
+    getRequest: function (resource, onSuccessCallback, onErrorCallback) {
+        $.ajax({
+            type: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: serverUrl + resource,
+            error: function (xhr, status, error) {
+                //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
+                if (onErrorCallback) {
+                    var json = $.parseJSON(xhr.responseText);
+                    onErrorCallback(json.error)
+                }
+            },
+            success: function (data, status, xhr) {
+                if (onSuccessCallback) {
+                    //var json = JSON.stringify(data);
+                    onSuccessCallback(data);
+                }
+            }
+        });
+    },
+
+    deleteRequest: function (resource) {
+        $.ajax({
+            type: "DELETE",
+            url: resource
+        });
+    },
+
+    addBookToTable: function (element, jsonBook) {
+        var date = new Date();
+        date.setTime(jsonBook.ctime);
+
+        element.append('<tr id="' + jsonBook.id + '">' +
+            '<td>' + jsonBook.title + '</td>' +
+            '<td>' + jsonBook.author + '</td>' +
+            '<td>' + app.parseUnixDate(date) + '</td>' +
+            '</tr>');
+    },
+
+    parseUnixDate: function (date) {
+
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var year = date.getFullYear();
+        var month = months[date.getMonth()];
+        var day = date.getDate();
+        var formattedDay = day + ' ' + month + ' ' + year;
+
+        var hours = date.getHours();
+        var minutes = "0" + date.getMinutes();
+        var seconds = "0" + date.getSeconds();
+
+        var formattedTime = hours + ':' + minutes.substr(-2);
+        return formattedDay + ' ' + formattedTime;
     }
 };
 
