@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-//var serverUrl = "http://bibliorest-adoorg.rhcloud.com";
 var scannedBookResource;
 
 var app = {
@@ -34,12 +33,19 @@ var app = {
             app.scanBook();
         });
         $("#add").click(function () {
-            window.location.href = '#scannedBook';
+            $('#detailId').val('');
+            $('#detailTitle').val('');
+            $('#detailAuthor').val('');
+            $('#detailTags').val('');
+            $('#detailImage').attr('src', '');
+            $('#returnDetailBook').hide();
+            $('#lendDetailBook').hide();
+            window.location.href = '#detailBook';
         });
         $("#cancelScannedBook").click(function () {
             $('tr:last').remove();
             window.location.href = '#books';
-            restclient.deleteRequest(scannedBookResource, true);
+            restclient.deleteRequest(scannedBookResource, {relativeResource: false});
         });
         $("#addScannedBook").click(function () {
             window.location.href = '#books';
@@ -48,15 +54,21 @@ var app = {
             window.location.href = '#books';
         });
         $("#saveDetailBook").click(function () {
-            app.editBook($('#detailId').val(), $('#detailTitle').val(),
-                $('#detailAuthor').val(), $('#detailTags').val());
+            var bookId = $('#detailId').val();
+            if (bookId) {
+                app.editBook(bookId, $('#detailTitle').val(),
+                    $('#detailAuthor').val(), $('#detailTags').val());
+            } else {
+                app.createBook($('#detailTitle').val(),
+                    $('#detailAuthor').val(), $('#detailTags').val());
+            }
             window.location.href = '#books';
         });
 
         restclient.getRequest("/books", function (data) {
             $table = $('tbody');
             $.each(data, function (i, item) {
-                app.addBookToTable($table, item);
+                app.addJsonBookToTable($table, item);
             })
         });
         $("#table-custom-2").find("tbody").delegate("tr", "click", function () {
@@ -90,7 +102,7 @@ var app = {
                             $('#scannedAuthor').html('Author: ' + data.author);
                             $('#scannedImage').attr('src', data.imageUrl);
 
-                            app.addBookToTable($('tbody'), data);
+                            app.addJsonBookToTable($('tbody'), data);
                             screen.unlockOrientation();
                         });
                 }
@@ -100,6 +112,23 @@ var app = {
                 alert("Scanning failed: " + error);
             }
         );
+    },
+
+    createBook: function (title, author, tags) {
+        restclient.postRequest("/books",
+            {title: title, author: author, tags: tags},
+            function (location, data) {
+                restclient.getRequest(location, function (data) {
+                        app.addJsonBookToTable($('tbody'), data)
+                    },
+                    function (error) {
+                        alert(error);
+                    },
+                    {relativeResource: false});
+            },
+            function (error) {
+                alert(error);
+            })
     },
 
     editBook: function (id, title, author, tags) {
@@ -139,14 +168,23 @@ var app = {
             });
     },
 
-    addBookToTable: function (element, jsonBook) {
+    addJsonBookToTable: function (element, jsonBook) {
         var date = new Date();
         date.setTime(jsonBook.ctime);
 
+        //app.addBookToTable(element, jsonBook.id, jsonBook.title, jsonBook.author, jsonBook.date);
         element.append('<tr id="' + jsonBook.id + '">' +
             '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
             '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
             '<td id="' + jsonBook.id + 'date">' + dates.parseUnixDate(date) + '</td>' +
+            '</tr>');
+    },
+
+    addBookToTable: function (element, bookId, title, author, date) {
+        element.append('<tr id="' + bookId + '">' +
+            '<td id="' + bookId + 'title">' + title + '</td>' +
+            '<td id="' + bookId + 'author">' + author + '</td>' +
+            '<td id="' + bookId + 'date">' + dates.parseUnixDate(date) + '</td>' +
             '</tr>');
     }
 };
