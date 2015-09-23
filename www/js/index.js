@@ -49,6 +49,10 @@ var app = {
         $("#returnDetailBook").click(function () {
             window.location.href = '#books';
         });
+        $("#saveDetailBook").click(function () {
+            app.editBook($('#detailId').val(), $('#detailTitle').val(), $('#detailAuthor').val());
+            window.location.href = '#books';
+        });
 
         app.getRequest("/books", function (data) {
             $table = $('tbody');
@@ -66,8 +70,9 @@ var app = {
         app.getBook(bookId,
             function (data) {
                 window.location.href = '#detailBook';
-                $('#detailTitle').html('Title: ' + data.title);
-                $('#detailAuthor').html('Author: ' + data.author);
+                $('#detailId').val(data.id);
+                $('#detailTitle').val(data.title);
+                $('#detailAuthor').val(data.author);
                 $('#detailImage').attr('src', data.imageUrl);
             })
     },
@@ -108,6 +113,17 @@ var app = {
         );
     },
 
+    editBook: function (id, title, author) {
+        $('#' + id + 'title').html(title);
+        $('#' + id + 'author').html(author);
+
+        app.putRequest("/books/" + id,
+            {title: title, author: author},
+            function (data) {
+                // TODO toast for modification success
+            });
+    },
+
     getBook: function (bookId, onSuccessCallback) {
         app.getRequest("/books/" + bookId,
             function (data) {
@@ -136,6 +152,31 @@ var app = {
     postRequest: function (resource, payload, onSuccessCallback, onErrorCallback) {
         $.ajax({
             type: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: serverUrl + resource,
+            data: JSON.stringify(payload),
+            error: function (xhr, status, error) {
+                //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
+                if (onErrorCallback) {
+                    //var json = JSON.stringify(xhr.responseText);
+                    alert(xhr.responseText);
+                    onErrorCallback(xhr.responseText)
+                }
+            },
+            success: function (data, status, xhr) {
+                if (onSuccessCallback) {
+                    onSuccessCallback(xhr.getResponseHeader('Location'), data);
+                }
+            }
+        });
+    },
+
+    putRequest: function (resource, payload, onSuccessCallback, onErrorCallback) {
+        $.ajax({
+            type: "PUT",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -194,9 +235,9 @@ var app = {
         date.setTime(jsonBook.ctime);
 
         element.append('<tr id="' + jsonBook.id + '">' +
-            '<td>' + jsonBook.title + '</td>' +
-            '<td>' + jsonBook.author + '</td>' +
-            '<td>' + app.parseUnixDate(date) + '</td>' +
+            '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
+            '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
+            '<td id="' + jsonBook.id + 'date">' + app.parseUnixDate(date) + '</td>' +
             '</tr>');
     },
 

@@ -114,8 +114,13 @@
     </div><!-- /header -->
 
     <div role="main" class="ui-content">
-        <p id="detailTitle"></p>
-        <p id="detailAuthor"></p>
+        <form>
+            <input id="detailId" type="hidden">
+            <label for="detailTitle">Title</label>
+            <input data-clear-btn="true" name="detailTitle" id="detailTitle" value="Value" type="text">
+            <label for="detailAuthor">Author</label>
+            <input data-clear-btn="true" name="detailAuthor" id="detailAuthor" value="Value" type="text">
+        </form>
         <img id="detailImage" src=""/>
     </div><!-- /content -->
 
@@ -123,7 +128,7 @@
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><button id="returnDetailBook" data-icon="back">Return</button></li>
-                <!--<li><button id="addScannedBook" data-icon="plus">Add</button></li>-->
+                <li><button id="saveDetailBook" data-icon="check">Save</button></li>
             </ul>
         </div><!-- /navbar -->
     </div><!-- /footer -->
