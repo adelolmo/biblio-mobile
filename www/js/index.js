@@ -17,7 +17,6 @@
  * under the License.
  */
 //var serverUrl = "http://bibliorest-adoorg.rhcloud.com";
-var serverUrl = "http://192.168.178.29:8080";
 var scannedBookResource;
 
 var app = {
@@ -31,7 +30,6 @@ var app = {
     },
 
     onDeviceReady: function () {
-        //app.receivedEvent('deviceready');
         $("#scan").click(function () {
             app.scanBook();
         });
@@ -41,20 +39,21 @@ var app = {
         $("#cancelScannedBook").click(function () {
             $('tr:last').remove();
             window.location.href = '#books';
-            app.deleteRequest(scannedBookResource);
+            restclient.deleteRequest(scannedBookResource, true);
         });
         $("#addScannedBook").click(function () {
             window.location.href = '#books';
         });
-        $("#returnDetailBook").click(function () {
+        $("#backDetailBook").click(function () {
             window.location.href = '#books';
         });
         $("#saveDetailBook").click(function () {
-            app.editBook($('#detailId').val(), $('#detailTitle').val(), $('#detailAuthor').val());
+            app.editBook($('#detailId').val(), $('#detailTitle').val(),
+                $('#detailAuthor').val(), $('#detailTags').val());
             window.location.href = '#books';
         });
 
-        app.getRequest("/books", function (data) {
+        restclient.getRequest("/books", function (data) {
             $table = $('tbody');
             $.each(data, function (i, item) {
                 app.addBookToTable($table, item);
@@ -73,19 +72,9 @@ var app = {
                 $('#detailId').val(data.id);
                 $('#detailTitle').val(data.title);
                 $('#detailAuthor').val(data.author);
+                $('#detailTags').val(data.tags);
                 $('#detailImage').attr('src', data.imageUrl);
             })
-    },
-
-    receivedEvent: function (id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     },
 
     scanBook: function () {
@@ -113,19 +102,20 @@ var app = {
         );
     },
 
-    editBook: function (id, title, author) {
+    editBook: function (id, title, author, tags) {
         $('#' + id + 'title').html(title);
         $('#' + id + 'author').html(author);
+        $('#' + id + 'tags').html(author);
 
-        app.putRequest("/books/" + id,
-            {title: title, author: author},
+        restclient.putRequest("/books/" + id,
+            {title: title, author: author, tags: tags},
             function (data) {
                 // TODO toast for modification success
             });
     },
 
     getBook: function (bookId, onSuccessCallback) {
-        app.getRequest("/books/" + bookId,
+        restclient.getRequest("/books/" + bookId,
             function (data) {
                 if (onSuccessCallback) {
                     onSuccessCallback(data);
@@ -136,7 +126,7 @@ var app = {
     sendBarCode: function (isbn, format, onSuccessCallback) {
         console.log('sendBarCode isbn[' + isbn + '] format[' + format + ']');
 
-        app.postRequest("/barcode",
+        restclient.postRequest("/barcode",
             {isbn: isbn, format: format},
             function (location, data) {
                 //alert("location: " + location + "  data: " + data);
@@ -149,87 +139,6 @@ var app = {
             });
     },
 
-    postRequest: function (resource, payload, onSuccessCallback, onErrorCallback) {
-        $.ajax({
-            type: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            url: serverUrl + resource,
-            data: JSON.stringify(payload),
-            error: function (xhr, status, error) {
-                //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
-                if (onErrorCallback) {
-                    //var json = JSON.stringify(xhr.responseText);
-                    alert(xhr.responseText);
-                    onErrorCallback(xhr.responseText)
-                }
-            },
-            success: function (data, status, xhr) {
-                if (onSuccessCallback) {
-                    onSuccessCallback(xhr.getResponseHeader('Location'), data);
-                }
-            }
-        });
-    },
-
-    putRequest: function (resource, payload, onSuccessCallback, onErrorCallback) {
-        $.ajax({
-            type: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            url: serverUrl + resource,
-            data: JSON.stringify(payload),
-            error: function (xhr, status, error) {
-                //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
-                if (onErrorCallback) {
-                    //var json = JSON.stringify(xhr.responseText);
-                    alert(xhr.responseText);
-                    onErrorCallback(xhr.responseText)
-                }
-            },
-            success: function (data, status, xhr) {
-                if (onSuccessCallback) {
-                    onSuccessCallback(xhr.getResponseHeader('Location'), data);
-                }
-            }
-        });
-    },
-
-    getRequest: function (resource, onSuccessCallback, onErrorCallback) {
-        $.ajax({
-            type: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            url: serverUrl + resource,
-            error: function (xhr, status, error) {
-                //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
-                if (onErrorCallback) {
-                    var json = $.parseJSON(xhr.responseText);
-                    onErrorCallback(json.error)
-                }
-            },
-            success: function (data, status, xhr) {
-                if (onSuccessCallback) {
-                    //var json = JSON.stringify(data);
-                    onSuccessCallback(data);
-                }
-            }
-        });
-    },
-
-    deleteRequest: function (resource) {
-        $.ajax({
-            type: "DELETE",
-            url: resource
-        });
-    },
-
     addBookToTable: function (element, jsonBook) {
         var date = new Date();
         date.setTime(jsonBook.ctime);
@@ -237,24 +146,8 @@ var app = {
         element.append('<tr id="' + jsonBook.id + '">' +
             '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
             '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
-            '<td id="' + jsonBook.id + 'date">' + app.parseUnixDate(date) + '</td>' +
+            '<td id="' + jsonBook.id + 'date">' + dates.parseUnixDate(date) + '</td>' +
             '</tr>');
-    },
-
-    parseUnixDate: function (date) {
-
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var year = date.getFullYear();
-        var month = months[date.getMonth()];
-        var day = date.getDate();
-        var formattedDay = day + ' ' + month + ' ' + year;
-
-        var hours = date.getHours();
-        var minutes = "0" + date.getMinutes();
-        var seconds = "0" + date.getSeconds();
-
-        var formattedTime = hours + ':' + minutes.substr(-2);
-        return formattedDay + ' ' + formattedTime;
     }
 };
 

@@ -120,6 +120,8 @@
             <input data-clear-btn="true" name="detailTitle" id="detailTitle" value="Value" type="text">
             <label for="detailAuthor">Author</label>
             <input data-clear-btn="true" name="detailAuthor" id="detailAuthor" value="Value" type="text">
+            <label for="detailTags">Tags</label>
+            <input data-clear-btn="true" name="detailTags" id="detailTags" value="Value" type="text">
         </form>
         <img id="detailImage" src=""/>
     </div><!-- /content -->
@@ -127,7 +129,9 @@
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar" data-iconpos="left">
             <ul>
+                <li><button id="backDetailBook" data-icon="carat-l">Back</button></li>
                 <li><button id="returnDetailBook" data-icon="back">Return</button></li>
+                <li><button id="lendDetailBook" data-icon="user">Lend</button></li>
                 <li><button id="saveDetailBook" data-icon="check">Save</button></li>
             </ul>
         </div><!-- /navbar -->
@@ -135,6 +139,8 @@
 </div>
 
 <script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/restclient.js"></script>
+<script type="text/javascript" src="js/dates.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
