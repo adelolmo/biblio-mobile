@@ -134,7 +134,36 @@
                 <li><button id="lendDetailBook" data-icon="user">Lend</button></li>
                 <li><button id="saveDetailBook" data-icon="check">Save</button></li>
             </ul>
-        </div><!-- /navbar -->
+        </div>
+    </div><!-- /footer -->
+</div>
+
+<div data-role="page" id="newBook">
+
+    <div data-role="header">
+        <h1>Biblio</h1>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content">
+        <form>
+            <input id="newId" type="hidden">
+            <label for="newTitle">Title</label>
+            <input data-clear-btn="true" name="newTitle" id="newTitle" value="Value" type="text">
+            <label for="newAuthor">Author</label>
+            <input data-clear-btn="true" name="newAuthor" id="newAuthor" value="Value" type="text">
+            <label for="newTags">Tags</label>
+            <input data-clear-btn="true" name="newTags" id="newTags" value="Value" type="text">
+        </form>
+        <img id="newImage" src=""/>
+    </div><!-- /content -->
+
+    <div data-role="footer" data-position="fixed">
+        <div data-role="navbar" data-iconpos="left">
+            <ul>
+                <li><button id="backNewBook" data-icon="carat-l">Back</button></li>
+                <li><button id="saveNewBook" data-icon="check">Save</button></li>
+            </ul>
+        </div>
     </div><!-- /footer -->
 </div>
 

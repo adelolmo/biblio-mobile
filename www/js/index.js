@@ -29,19 +29,18 @@ var app = {
     },
 
     onDeviceReady: function () {
+        // listeners for page books
         $("#scan").click(function () {
             app.scanBook();
         });
         $("#add").click(function () {
-            $('#detailId').val('');
-            $('#detailTitle').val('');
-            $('#detailAuthor').val('');
-            $('#detailTags').val('');
-            $('#detailImage').attr('src', '');
-            $('#returnDetailBook').hide();
-            $('#lendDetailBook').hide();
-            window.location.href = '#detailBook';
+            $('#newTitle').val('');
+            $('#newAuthor').val('');
+            $('#newTags').val('');
+            window.location.href = '#newBook';
         });
+
+        // listeners for page scannedBook
         $("#cancelScannedBook").click(function () {
             $('tr:last').remove();
             window.location.href = '#books';
@@ -50,18 +49,24 @@ var app = {
         $("#addScannedBook").click(function () {
             window.location.href = '#books';
         });
+
+        // listeners for page detailBook
         $("#backDetailBook").click(function () {
             window.location.href = '#books';
         });
         $("#saveDetailBook").click(function () {
-            var bookId = $('#detailId').val();
-            if (bookId) {
-                app.editBook(bookId, $('#detailTitle').val(),
-                    $('#detailAuthor').val(), $('#detailTags').val());
-            } else {
-                app.createBook($('#detailTitle').val(),
-                    $('#detailAuthor').val(), $('#detailTags').val());
-            }
+            app.editBook($('#detailId').val(), $('#detailTitle').val(),
+                $('#detailAuthor').val(), $('#detailTags').val());
+            window.location.href = '#books';
+        });
+
+        // listeners for page newBook
+        $("#backNewBook").click(function () {
+            window.location.href = '#books';
+        });
+        $("#saveNewBook").click(function () {
+            app.createBook($('#newTitle').val(),
+                $('#newAuthor').val(), $('#newTags').val());
             window.location.href = '#books';
         });
 
@@ -153,7 +158,7 @@ var app = {
     },
 
     sendBarCode: function (isbn, format, onSuccessCallback) {
-        console.log('sendBarCode isbn[' + isbn + '] format[' + format + ']');
+        //console.log('sendBarCode isbn[' + isbn + '] format[' + format + ']');
 
         restclient.postRequest("/barcode",
             {isbn: isbn, format: format},
