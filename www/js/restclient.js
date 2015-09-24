@@ -116,7 +116,7 @@ var restclient = {
         });
     },
 
-    deleteRequest: function (resource, options) {
+    deleteRequest: function (resource, onSuccessCallback, options) {
         var url = serverUrl + resource;
         if (options) {
             if (options.relativeResource == false) {
@@ -126,7 +126,12 @@ var restclient = {
 
         $.ajax({
             type: "DELETE",
-            url: url
+            url: url,
+            success: function (data, status, xhr) {
+                if (onSuccessCallback) {
+                    onSuccessCallback(data);
+                }
+            }
         });
     }
 };

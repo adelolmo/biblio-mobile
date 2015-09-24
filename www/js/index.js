@@ -29,45 +29,40 @@ var app = {
     },
 
     onDeviceReady: function () {
-        // listeners for page books
-        $("#scan").click(function () {
+          // listeners for page books
+        $("#buttonScan").click(function () {
             app.scanBook();
         });
-        $("#add").click(function () {
+        $("#buttonAdd").click(function () {
             $('#newTitle').val('');
             $('#newAuthor').val('');
             $('#newTags').val('');
-            window.location.href = '#newBook';
         });
 
         // listeners for page scannedBook
-        $("#cancelScannedBook").click(function () {
+        $("#buttonCancelScannedBook").click(function () {
             $('tr:last').remove();
-            window.location.href = '#books';
-            restclient.deleteRequest(scannedBookResource, {relativeResource: false});
+            restclient.deleteRequest(scannedBookResource,
+                function () {
+                    // ignore success
+                },
+                {relativeResource: false});
         });
-        $("#addScannedBook").click(function () {
-            window.location.href = '#books';
-        });
-
-        // listeners for page detailBook
-        $("#backDetailBook").click(function () {
-            window.location.href = '#books';
-        });
-        $("#saveDetailBook").click(function () {
+        $("#buttonSaveDetailBook").click(function () {
             app.editBook($('#detailId').val(), $('#detailTitle').val(),
                 $('#detailAuthor').val(), $('#detailTags').val());
-            window.location.href = '#books';
+            $.mobile.changePage('#pageBooks');
+        });
+        $("#buttonDeleteDetailBook").click(function () {
+            app.deleteBook($('#detailId').val());
+            $.mobile.changePage('#pageBooks');
         });
 
         // listeners for page newBook
-        $("#backNewBook").click(function () {
-            window.location.href = '#books';
-        });
-        $("#saveNewBook").click(function () {
+        $("#buttonSaveNewBook").click(function () {
             app.createBook($('#newTitle').val(),
                 $('#newAuthor').val(), $('#newTags').val());
-            window.location.href = '#books';
+            $.mobile.changePage('#pageBooks');
         });
 
         restclient.getRequest("/books", function (data) {
@@ -85,7 +80,7 @@ var app = {
     navigateBookDetail: function (bookId) {
         app.getBook(bookId,
             function (data) {
-                window.location.href = '#detailBook';
+                $.mobile.changePage('#pageDetailBook');
                 $('#detailId').val(data.id);
                 $('#detailTitle').val(data.title);
                 $('#detailAuthor').val(data.author);
@@ -102,7 +97,7 @@ var app = {
                         function (data) {
                             screen.lockOrientation('portrait');
 
-                            window.location.href = '#scannedBook';
+                            $.mobile.changePage('#pageScannedBook');
                             $('#scannedTitle').html('Title: ' + data.title);
                             $('#scannedAuthor').html('Author: ' + data.author);
                             $('#scannedImage').attr('src', data.imageUrl);
@@ -148,6 +143,14 @@ var app = {
             });
     },
 
+    deleteBook: function (id) {
+        restclient.deleteRequest("/books/" + id,
+            function () {
+                // TODO toast for modification success
+                $('#' + id).remove();
+            });
+    },
+
     getBook: function (bookId, onSuccessCallback) {
         restclient.getRequest("/books/" + bookId,
             function (data) {
@@ -158,14 +161,10 @@ var app = {
     },
 
     sendBarCode: function (isbn, format, onSuccessCallback) {
-        //console.log('sendBarCode isbn[' + isbn + '] format[' + format + ']');
-
         restclient.postRequest("/barcode",
             {isbn: isbn, format: format},
             function (location, data) {
-                //alert("location: " + location + "  data: " + data);
                 scannedBookResource = location;
-
                 onSuccessCallback(data);
             },
             function (data) {
