@@ -81,12 +81,7 @@ var app = {
         app.getBook(bookId,
             function (data) {
                 $.mobile.changePage('#pageDetailBook');
-                $('#detailId').val(data.id);
-                $('#detailTitle').val(data.title);
-                $('#detailAuthor').val(data.author);
-                $('#detailTags').val(data.tags);
-                $('#detailIsbn').val(data.isbn);
-                $('#detailImage').attr('src', data.imageUrl);
+                app.populateBookDetailPage(data);
             })
     },
 
@@ -98,12 +93,10 @@ var app = {
                         function (data) {
                             screen.lockOrientation('portrait');
 
-                            $.mobile.changePage('#pageScannedBook');
-                            $('#scannedTitle').html('Title: ' + data.title);
-                            $('#scannedAuthor').html('Author: ' + data.author);
-                            $('#scannedImage').attr('src', data.imageUrl);
-
+                            $.mobile.changePage('#pageDetailBook');
+                            app.populateBookDetailPage(data);
                             app.addJsonBookToTable($('tbody'), data);
+
                             screen.unlockOrientation();
                         },
                         function (data, statusCode) {
@@ -191,7 +184,6 @@ var app = {
         var date = new Date();
         date.setTime(jsonBook.ctime);
 
-        //app.addBookToTable(element, jsonBook.id, jsonBook.title, jsonBook.author, jsonBook.date);
         element.append('<tr id="' + jsonBook.id + '">' +
             '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
             '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
@@ -199,13 +191,13 @@ var app = {
             '</tr>');
     },
 
-    addBookToTable: function (element, bookId, title, author, date) {
-        element.append('<tr id="' + bookId + '">' +
-            '<td id="' + bookId + 'title">' + title + '</td>' +
-            '<td id="' + bookId + 'author">' + author + '</td>' +
-            '<td id="' + bookId + 'date">' + dates.parseUnixDate(date) + '</td>' +
-            '</tr>');
-    }
-};
+    populateBookDetailPage: function(jsonBook){
+        $('#detailId').val(jsonBook.id);
+        $('#detailTitle').val(jsonBook.title);
+        $('#detailAuthor').val(jsonBook.author);
+        $('#detailTags').val(jsonBook.tags);
+        $('#detailIsbn').val(jsonBook.isbn);
+        $('#detailImage').attr('src', jsonBook.imageUrl);
+    }};
 
 app.initialize();
