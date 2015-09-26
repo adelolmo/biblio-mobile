@@ -41,8 +41,8 @@ var restclient = {
                 //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
                 if (onErrorCallback) {
                     //var json = JSON.stringify(xhr.responseText);
-                    alert(xhr.responseText);
-                    onErrorCallback(xhr.responseText)
+                    //alert(xhr.responseText);
+                    onErrorCallback(xhr.responseText, xhr.status)
                 }
             },
             success: function (data, status, xhr) {

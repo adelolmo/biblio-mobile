@@ -29,7 +29,7 @@ var app = {
     },
 
     onDeviceReady: function () {
-          // listeners for page books
+        // listeners for page books
         $("#buttonScan").click(function () {
             app.scanBook();
         });
@@ -85,6 +85,7 @@ var app = {
                 $('#detailTitle').val(data.title);
                 $('#detailAuthor').val(data.author);
                 $('#detailTags').val(data.tags);
+                $('#detailIsbn').val(data.isbn);
                 $('#detailImage').attr('src', data.imageUrl);
             })
     },
@@ -104,6 +105,18 @@ var app = {
 
                             app.addJsonBookToTable($('tbody'), data);
                             screen.unlockOrientation();
+                        },
+                        function (data, statusCode) {
+                            if (statusCode == '409') {
+                                restclient.getRequest("/isbns/" + result.text,
+                                    function (data) {
+                                        screen.lockOrientation('portrait');
+                                        app.navigateBookDetail(data.id);
+                                        screen.unlockOrientation();
+                                    })
+                            } else {
+                                alert("status: " + statusCode + "  " + data.error);
+                            }
                         });
                 }
             },
@@ -160,15 +173,17 @@ var app = {
             })
     },
 
-    sendBarCode: function (isbn, format, onSuccessCallback) {
+    sendBarCode: function (isbn, format, onSuccessCallback, onErrorCallback) {
         restclient.postRequest("/barcode",
             {isbn: isbn, format: format},
             function (location, data) {
                 scannedBookResource = location;
                 onSuccessCallback(data);
             },
-            function (data) {
-                alert(data.error);
+            function (data, statusCode) {
+                if (onErrorCallback) {
+                    onErrorCallback(data, statusCode);
+                }
             });
     },
 
