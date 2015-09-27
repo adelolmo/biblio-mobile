@@ -4,7 +4,7 @@
     <description>
         Biblio is an application to manage your physical book library
     </description>
-    <author email="andoni.delolmo@gmail.com" href="http://cordova.io">
+    <author email="andoni.delolmo@gmail.com" href="https://github.com/adelolmo/biblio-mobile">
         Andoni del Olmo
     </author>
     <content src="index.html" />

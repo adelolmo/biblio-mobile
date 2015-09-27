@@ -48,7 +48,8 @@
         
     <div data-role="header" data-position="fixed">
         <h1>Biblio</h1>   
-        <a href="#" data-icon="search" class="ui-btn-right">Search</a>
+        <a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
+        <a href="#" data-icon="search" data-iconpos="notext" class="ui-btn-right">Search</a>
           
         <!--        <form>
                     <label for="search-1">Search:</label>
@@ -75,6 +76,13 @@
             
     </div>
         
+    <div data-role="panel" data-display="overlay" data-theme="a" id="nav-panel">
+        <ul data-role="listview">
+            <li>Andoni</li>
+            <li data-icon="power"><a href="#pageLogin" id="buttonLogout">Logout</a></li>
+        </ul>
+    </div><!-- /panel -->
+
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar" data-iconpos="left">
             <ul>

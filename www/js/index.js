@@ -70,13 +70,22 @@ var app = {
             $.mobile.changePage('#pageBooks');
         });
 
+        // listeners for panel
+        $("#buttonLogout").click(function(){
+            window.localStorage.removeItem('sessionToken');
+            $("#loginUsername").val(window.localStorage.getItem('username'));
+            $("#loginPassword").val(window.localStorage.getItem('password'));
+            $('tbody').html('');
+            $("#table-custom-2").find("tbody").undelegate('tr', 'click');
+        });
+
         var sessionToken = window.localStorage.getItem('sessionToken');
         if (!sessionToken) {
             $.mobile.changePage('#pageLogin');
             $("#loginUsername").val(window.localStorage.getItem('username'));
             $("#loginPassword").val(window.localStorage.getItem('password'));
         } else {
-
+            $.mobile.changePage('#pageBooks');
             app.loadBooks();
         }
     },
@@ -84,7 +93,6 @@ var app = {
     loadBooks: function () {
         restclient.getRequest("/books",
             function (data) {
-                $.mobile.changePage('#pageBooks');
                 $table = $('tbody');
                 $.each(data, function (i, item) {
                     app.addJsonBookToTable($table, item);
@@ -107,10 +115,17 @@ var app = {
                 window.localStorage.setItem('sessionToken', data.session);
                 window.localStorage.setItem('username', username);
                 window.localStorage.setItem('password', password);
+                $.mobile.changePage('#pageBooks');
                 app.loadBooks();
             },
             function (data, status) {
-                alert("status: " + status + "  " + data);
+                if (status == '400') {
+                    navigator.notification.alert("Invalid username or password",
+                        null, "Error", "Ok")
+                } else {
+                    navigator.notification.alert("Unknown error\n" + data.error,
+                        null, "Error", "Ok")
+                }
             }
         )
     },
@@ -146,14 +161,17 @@ var app = {
                                         screen.unlockOrientation();
                                     })
                             } else {
-                                alert("status: " + statusCode + "  " + data.error);
+                                navigator.notification.alert("Unknown error\nStatus code: " + statusCode
+                                    + "\nError: " + data.error,
+                                    null, "Error", "Ok")
                             }
                         });
                 }
             },
 
             function (error) {
-                alert("Scanning failed: " + error);
+                navigator.notification.alert("Scanning failed: " + error,
+                    null, "Error", "Ok")
             }
         );
     },
@@ -166,12 +184,14 @@ var app = {
                         app.addJsonBookToTable($('tbody'), data)
                     },
                     function (error) {
-                        alert(error);
+                        navigator.notification.alert("Unknown error\n" + error,
+                            null, "Error", "Ok")
                     },
                     {relativeResource: false});
             },
             function (error) {
-                alert(error);
+                navigator.notification.alert("Unknown error\n" + error,
+                    null, "Error", "Ok")
             })
     },
 
