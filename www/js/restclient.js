@@ -36,6 +36,9 @@ var restclient = {
                 'Content-Type': 'application/json'
             },
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", window.localStorage.getItem('sessionToken'));
+            },
             data: JSON.stringify(payload),
             error: function (xhr, status, error) {
                 //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
@@ -68,6 +71,9 @@ var restclient = {
                 'Content-Type': 'application/json'
             },
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", window.localStorage.getItem('sessionToken'));
+            },
             data: JSON.stringify(payload),
             error: function (xhr, status, error) {
                 //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
@@ -100,6 +106,9 @@ var restclient = {
                 'Content-Type': 'application/json'
             },
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", window.localStorage.getItem('sessionToken'));
+            },
             error: function (xhr, status, error) {
                 //alert("error: " + error.message + " status: " + status + "\nxhr: " + xhr);
                 if (onErrorCallback) {
@@ -127,6 +136,9 @@ var restclient = {
         $.ajax({
             type: "DELETE",
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", window.localStorage.getItem('sessionToken'));
+            },
             success: function (data, status, xhr) {
                 if (onSuccessCallback) {
                     onSuccessCallback(data);

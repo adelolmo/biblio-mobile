@@ -43,6 +43,28 @@
     <title>Biblio</title>
 </head>
 <body>
+<div data-role="page" id="pageLogin">
+
+    <div data-role="header">
+        <h1>Biblio</h1>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content">
+        <label for="loginUsername">Username:</label>
+        <input data-clear-btn="true" name="loginUsername" id="loginUsername" value="" type="text">
+        <label for="loginPassword">Password:</label>
+        <input data-clear-btn="true" name="loginPassword" id="loginPassword" value="" autocomplete="off" type="password">
+    </div><!-- /content -->
+
+    <div data-role="footer" data-position="fixed">
+        <div data-role="navbar" data-iconpos="left">
+            <ul>
+                <li><button id="buttonLoginLogin" data-prefetch="true" data-icon="carat-r">Login</button></li>
+            </ul>
+        </div>
+    </div><!-- /footer -->
+</div>
+
 <div data-role="page" id="pageBooks" data-title="Info">
         
     <div data-role="header" data-position="fixed">

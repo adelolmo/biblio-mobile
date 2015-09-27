@@ -29,6 +29,11 @@ var app = {
     },
 
     onDeviceReady: function () {
+        // listeners for page login
+        $("#buttonLoginLogin").click(function () {
+            app.loginUser($("#loginUsername").val(), $("#loginPassword").val());
+        });
+
         // listeners for page books
         $("#buttonScan").click(function () {
             app.scanBook();
@@ -65,7 +70,19 @@ var app = {
             $.mobile.changePage('#pageBooks');
         });
 
+        var sessionToken = window.localStorage.getItem('sessionToken');
+        if (!sessionToken) {
+            $.mobile.changePage('#pageLogin');
+
+        } else {
+
+            app.loadBooks();
+        }
+    },
+
+    loadBooks: function () {
         restclient.getRequest("/books", function (data) {
+            $.mobile.changePage('#pageBooks');
             $table = $('tbody');
             $.each(data, function (i, item) {
                 app.addJsonBookToTable($table, item);
@@ -74,7 +91,20 @@ var app = {
         $("#table-custom-2").find("tbody").delegate("tr", "click", function () {
             app.navigateBookDetail($(this).attr("id"));
         });
+    },
 
+    loginUser: function (username, password) {
+        restclient.postRequest("/users",
+            {username: username, password: password},
+            function (location, data) {
+                alert("success");
+                window.localStorage.setItem('sessionToken', data.session);
+                app.loadBooks();
+            },
+            function (data, status) {
+                alert("status: " + status + "  " + data);
+            }
+        )
     },
 
     navigateBookDetail: function (bookId) {
@@ -191,13 +221,14 @@ var app = {
             '</tr>');
     },
 
-    populateBookDetailPage: function(jsonBook){
+    populateBookDetailPage: function (jsonBook) {
         $('#detailId').val(jsonBook.id);
         $('#detailTitle').val(jsonBook.title);
         $('#detailAuthor').val(jsonBook.author);
         $('#detailTags').val(jsonBook.tags);
         $('#detailIsbn').val(jsonBook.isbn);
         $('#detailImage').attr('src', jsonBook.imageUrl);
-    }};
+    }
+};
 
 app.initialize();
