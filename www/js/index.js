@@ -115,6 +115,7 @@ var app = {
                 window.localStorage.setItem('sessionToken', data.session);
                 window.localStorage.setItem('username', username);
                 window.localStorage.setItem('password', password);
+                $('#panelUsername').html(username);
                 $.mobile.changePage('#pageBooks');
                 app.loadBooks();
             },
