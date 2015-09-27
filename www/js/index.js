@@ -73,7 +73,8 @@ var app = {
         var sessionToken = window.localStorage.getItem('sessionToken');
         if (!sessionToken) {
             $.mobile.changePage('#pageLogin');
-
+            $("#loginUsername").val(window.localStorage.getItem('username'));
+            $("#loginPassword").val(window.localStorage.getItem('password'));
         } else {
 
             app.loadBooks();
@@ -81,13 +82,19 @@ var app = {
     },
 
     loadBooks: function () {
-        restclient.getRequest("/books", function (data) {
-            $.mobile.changePage('#pageBooks');
-            $table = $('tbody');
-            $.each(data, function (i, item) {
-                app.addJsonBookToTable($table, item);
-            })
-        });
+        restclient.getRequest("/books",
+            function (data) {
+                $.mobile.changePage('#pageBooks');
+                $table = $('tbody');
+                $.each(data, function (i, item) {
+                    app.addJsonBookToTable($table, item);
+                })
+            },
+            function () {
+                $.mobile.changePage('#pageLogin');
+                $("#loginUsername").val(window.localStorage.getItem('username'));
+                $("#loginPassword").val(window.localStorage.getItem('password'));
+            });
         $("#table-custom-2").find("tbody").delegate("tr", "click", function () {
             app.navigateBookDetail($(this).attr("id"));
         });
@@ -97,8 +104,9 @@ var app = {
         restclient.postRequest("/users",
             {username: username, password: password},
             function (location, data) {
-                alert("success");
                 window.localStorage.setItem('sessionToken', data.session);
+                window.localStorage.setItem('username', username);
+                window.localStorage.setItem('password', password);
                 app.loadBooks();
             },
             function (data, status) {
