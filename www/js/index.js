@@ -33,6 +33,16 @@ var app = {
         $("#buttonLoginLogin").click(function () {
             app.loginUser($("#loginUsername").val(), $("#loginPassword").val());
         });
+        $("#buttonRegister").click(function () {
+            var password = $("#registerPassword").val();
+            var passwordRepeat = $("#registerPasswordRepeat").val();
+            if (password != passwordRepeat) {
+                navigator.notification.alert("Please reenter your password",
+                    null, "Error", "Ok")
+            } else {
+                app.loginUser($("#registerUsername").val(), password);
+            }
+        });
 
         // listeners for page books
         $("#buttonScan").click(function () {
@@ -71,10 +81,15 @@ var app = {
         });
 
         // listeners for panel
-        $("#buttonLogout").click(function(){
+        $("#buttonLogout").click(function () {
             window.localStorage.removeItem('sessionToken');
             $("#loginUsername").val(window.localStorage.getItem('username'));
             $("#loginPassword").val(window.localStorage.getItem('password'));
+
+            $("#registerUsername").val('');
+            $("#registerPassword").val('');
+            $("#registerPasswordRepeat").val('');
+
             $('tbody').html('');
             $("#table-custom-2").find("tbody").undelegate('tr', 'click');
         });
