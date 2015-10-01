@@ -115,7 +115,7 @@ var app = {
                 $.each(data, function (i, item) {
                     app.addJsonBookToTable($table, item);
                 });
-                $('#pageBooks').hide().show(0);
+                $('#pageBooks').find('table').table('refresh');
             },
             function () {
                 $.mobile.changePage('#pageLogin');
@@ -264,8 +264,8 @@ var app = {
 
         element.append('<tr id="' + jsonBook.id + '">' +
             '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
-            '<td id="' + jsonBook.id + 'author" class="ui-table-priority-1">' + jsonBook.author + '</td>' +
-            '<td id="' + jsonBook.id + 'date" class="ui-table-priority-2">' + dates.parseUnixDate(date) + '</td>' +
+            '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
+            '<td id="' + jsonBook.id + 'date">' + dates.parseUnixDate(date) + '</td>' +
             '</tr>');
     },
 
