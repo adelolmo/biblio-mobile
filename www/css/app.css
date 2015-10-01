@@ -1,0 +1,27 @@
+/* Show priority 1 at 320px (20em x 16px) */
+@media screen and (min-width: 20em) {
+    .table-books th.ui-table-priority-1,
+    .table-books td.ui-table-priority-1 {
+        display: table-cell;
+    }
+}
+
+/* Show priority 2 at 480px (30em x 16px) */
+@media screen and (min-width: 30em) {
+    .table-books th.ui-table-priority-2,
+    .table-books td.ui-table-priority-2 {
+        display: table-cell;
+    }
+}
+
+/* Manually hidden */
+.table-books th.ui-table-cell-hidden,
+.table-books td.ui-table-cell-hidden {
+    display: none;
+}
+
+/* Manually shown */
+.table-books th.ui-table-cell-visible,
+.table-books td.ui-table-cell-visible {
+    display: table-cell;
+}

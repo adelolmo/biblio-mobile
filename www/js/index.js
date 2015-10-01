@@ -17,6 +17,7 @@
  * under the License.
  */
 var scannedBookResource;
+var jsonBooks;
 
 var app = {
 
@@ -91,7 +92,7 @@ var app = {
             $("#registerPasswordRepeat").val('');
 
             $('tbody').html('');
-            $("#table-custom-2").find("tbody").undelegate('tr', 'click');
+            $("#table-books").find("tbody").undelegate('tr', 'click');
         });
 
         var sessionToken = window.localStorage.getItem('sessionToken');
@@ -101,6 +102,7 @@ var app = {
             $("#loginPassword").val(window.localStorage.getItem('password'));
         } else {
             $.mobile.changePage('#pageBooks');
+            $('#panelUsername').html(window.localStorage.getItem('username'));
             app.loadBooks();
         }
     },
@@ -108,17 +110,19 @@ var app = {
     loadBooks: function () {
         restclient.getRequest("/books",
             function (data) {
+                jsonBooks = data;
                 $table = $('tbody');
                 $.each(data, function (i, item) {
                     app.addJsonBookToTable($table, item);
-                })
+                });
+                $('#pageBooks').hide().show(0);
             },
             function () {
                 $.mobile.changePage('#pageLogin');
                 $("#loginUsername").val(window.localStorage.getItem('username'));
                 $("#loginPassword").val(window.localStorage.getItem('password'));
             });
-        $("#table-custom-2").find("tbody").delegate("tr", "click", function () {
+        $("#table-books").find("tbody").delegate("tr", "click", function () {
             app.navigateBookDetail($(this).attr("id"));
         });
     },
@@ -130,7 +134,7 @@ var app = {
                 window.localStorage.setItem('sessionToken', data.session);
                 window.localStorage.setItem('username', username);
                 window.localStorage.setItem('password', password);
-                $('#panelUsername').html(username);
+                $('#panelUsername').html(window.localStorage.getItem('username'));
                 $.mobile.changePage('#pageBooks');
                 app.loadBooks();
             },
@@ -260,8 +264,8 @@ var app = {
 
         element.append('<tr id="' + jsonBook.id + '">' +
             '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
-            '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
-            '<td id="' + jsonBook.id + 'date">' + dates.parseUnixDate(date) + '</td>' +
+            '<td id="' + jsonBook.id + 'author" class="ui-table-priority-1">' + jsonBook.author + '</td>' +
+            '<td id="' + jsonBook.id + 'date" class="ui-table-priority-2">' + dates.parseUnixDate(date) + '</td>' +
             '</tr>');
     },
 
