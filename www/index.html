@@ -46,7 +46,7 @@
 
 <div data-role="page" id="pageBooks">
         
-    <div data-role="header" data-position="fixed">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
         <h1>Biblio</h1>   
         <a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
         <a href="#" data-icon="search" data-iconpos="notext" class="ui-btn-right">Search</a>
@@ -57,7 +57,7 @@
                 </form>-->
     </div>
         
-    <div data-role="content">
+    <div role="main" class="ui-content">
         <table data-role="table" id="table-books" data-mode="columntoggle"
                class="ui-body-d ui-shadow table-stripe table-books" data-column-btn-theme="a"
                data-column-btn-text="Columns to display..." data-column-popup-theme="a">
@@ -80,7 +80,7 @@
         </ul>
     </div><!-- /panel -->
 
-    <div data-role="footer" data-position="fixed">
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><a href="#pageNewBook" id="buttonAdd" data-prefetch="true" data-icon="plus">New</a></li>
@@ -92,7 +92,7 @@
 
 <div data-role="page" id="pageLogin">
 
-    <div data-role="header">
+    <div data-role="header" data-position="fixed" style="overflow:hidden;">
         <h1>Biblio</h1>
     </div><!-- /header -->
 
@@ -119,8 +119,8 @@
 
 <div data-role="page" id="pageDetailBook">
 
-    <div data-role="header">
-        <h1>Biblio</h1>
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1>Book Details</h1>
     </div><!-- /header -->
 
     <div role="main" class="ui-content">
@@ -138,14 +138,14 @@
         <img id="detailImage" src=""/>
     </div><!-- /content -->
 
-    <div data-role="footer" data-position="fixed">
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><button disabled="" id="buttonReturnDetailBook" data-icon="back">Return</button></li>
                 <li><button id="buttonLendDetailBook" data-icon="user">Lend</button></li>
             </ul>
             <ul>
-                <li><a href="#pageBooks" data-direction="reverse" data-icon="carat-l">Back</a></li>
+                <li><a href="#" data-rel="back" data-icon="carat-l">Back</a></li>
                 <li><button id="buttonDeleteDetailBook" data-icon="delete">Delete</button></li>
                 <li><button id="buttonSaveDetailBook" data-icon="check">Save</button></li>
             </ul>
@@ -155,7 +155,7 @@
 
 <div data-role="page" id="pageNewBook">
 
-    <div data-role="header">
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
         <h1>Biblio</h1>
     </div><!-- /header -->
 
@@ -172,7 +172,7 @@
         <img id="newImage" src=""/>
     </div><!-- /content -->
 
-    <div data-role="footer" data-position="fixed">
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><a href="#pageBooks" data-direction="reverse" data-icon="carat-l">Back</a></li>

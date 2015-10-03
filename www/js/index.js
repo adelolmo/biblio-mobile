@@ -54,16 +54,11 @@ var app = {
             $('#newAuthor').val('');
             $('#newTags').val('');
         });
-
-        // listeners for page scannedBook
-        $("#buttonCancelScannedBook").click(function () {
-            $('tr:last').remove();
-            restclient.deleteRequest(scannedBookResource,
-                function () {
-                    // ignore success
-                },
-                {relativeResource: false});
+        $(document).on('pagebeforeshow', '#pageBooks', function(){
+            //alert('Index page');
         });
+
+        // listeners for page pageDetailBook
         $("#buttonSaveDetailBook").click(function () {
             app.editBook($('#detailId').val(), $('#detailTitle').val(),
                 $('#detailAuthor').val(), $('#detailTags').val());
@@ -153,7 +148,7 @@ var app = {
     navigateBookDetail: function (bookId) {
         app.getBook(bookId,
             function (data) {
-                $.mobile.changePage('#pageDetailBook');
+                $.mobile.navigate('#pageDetailBook');
                 app.populateBookDetailPage(data);
             })
     },
