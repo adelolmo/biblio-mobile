@@ -32,6 +32,7 @@
           <!--content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' bibliorest-adoorg.rhcloud.com">-->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 192.168.178.29">-->
+    <!--<meta http-equiv="Content-Security-Policy" content="connect-src 'self' bibliorest-adoorg.rhcloud.com 192.168.178.29:8081">-->
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport"
@@ -49,16 +50,14 @@
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
         <h1>Biblio</h1>   
         <a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
-        <a href="#" data-icon="search" data-iconpos="notext" class="ui-btn-right">Search</a>
-          
-        <!--        <form>
-                    <label for="search-1">Search:</label>
-                    <input name="search-1" id="search-1" value="" type="search">
-                </form>-->
+        <a id="buttonSearchBook" href="#" data-icon="search" data-iconpos="notext" class="ui-btn-right">Search</a>
     </div>
         
     <div role="main" class="ui-content">
-        <table data-role="table" id="table-books" data-mode="columntoggle"
+        <form id="searchBookForm">
+            <input id="filterTable-input" data-type="search">
+        </form>
+        <table data-role="table" id="table-books" data-filter="true" data-input="#filterTable-input" data-mode="columntoggle"
                class="ui-body-d ui-shadow table-stripe table-books" data-column-btn-theme="a"
                data-column-btn-text="Columns to display..." data-column-popup-theme="a">
             <thead>
@@ -182,10 +181,34 @@
     </div><!-- /footer -->
 </div>
 
+<div data-role="page" id="pageLendBook">
+
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1>Lend Book</h1>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content">
+        <form>
+            <label for="searchPerson">Search:</label>
+            <input name="searchPerson" id="searchPerson" value="" placeholder="Find person" type="search">
+        </form>
+    </div><!-- /content -->
+
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        <div data-role="navbar" data-iconpos="left">
+            <ul>
+                <li><a href="#pageDetailBook" data-direction="reverse" data-icon="carat-l">Back</a></li>
+                <li><button id="buttonLendBook" data-icon="check">Ok</button></li>
+            </ul>
+        </div>
+    </div><!-- /footer -->
+</div>
+
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/restclient.js"></script>
+<script type="text/javascript" src="js/http.js"></script>
 <script type="text/javascript" src="js/dates.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<!--<script src="http://192.168.178.29:8081/target/target-script-min.js#anonymous"></script>-->
+<script src="http://192.168.178.29:8090/target/target-script-min.js#anonymous"></script>
 </body>
 </html>

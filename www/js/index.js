@@ -46,6 +46,16 @@ var app = {
         });
 
         // listeners for page books
+        $('#searchBookForm').hide();
+        $('#buttonSearchBook').click(function () {
+            var $searchBookForm = $('#searchBookForm');
+            if ($searchBookForm.is(":visible")) {
+                $searchBookForm.hide();
+            } else {
+                $searchBookForm.show();
+            }
+            $('#pageBooks').find('table').table('refresh');
+        });
         $("#buttonScan").click(function () {
             app.scanBook();
         });
@@ -54,9 +64,9 @@ var app = {
             $('#newAuthor').val('');
             $('#newTags').val('');
         });
-        $(document).on('pagebeforeshow', '#pageBooks', function(){
-            //alert('Index page');
-        });
+        //$(document).on('pagebeforeshow', '#pageBooks', function () {
+        //alert('Index page');
+        //});
 
         // listeners for page pageDetailBook
         $("#buttonSaveDetailBook").click(function () {
@@ -67,6 +77,9 @@ var app = {
         $("#buttonDeleteDetailBook").click(function () {
             app.deleteBook($('#detailId').val());
             $.mobile.changePage('#pageBooks');
+        });
+        $("#buttonLendDetailBook").click(function () {
+            $.mobile.changePage('#pageLendBook');
         });
 
         // listeners for page newBook
@@ -125,8 +138,8 @@ var app = {
     loginUser: function (username, password) {
         restclient.postRequest("/users",
             {username: username, password: password},
-            function (location, data) {
-                window.localStorage.setItem('sessionToken', data.session);
+            function (headers, data) {
+                window.localStorage.setItem('sessionToken', http.getHeader(headers, 'Session-Token'));
                 window.localStorage.setItem('username', username);
                 window.localStorage.setItem('password', password);
                 $('#panelUsername').html(window.localStorage.getItem('username'));
@@ -194,8 +207,8 @@ var app = {
     createBook: function (title, author, tags) {
         restclient.postRequest("/books",
             {title: title, author: author, tags: tags},
-            function (location, data) {
-                restclient.getRequest(location, function (data) {
+            function (headers, data) {
+                restclient.getRequest(http.getHeader(headers, 'Location'), function (data) {
                         app.addJsonBookToTable($('tbody'), data)
                     },
                     function (error) {
@@ -242,8 +255,8 @@ var app = {
     sendBarCode: function (isbn, format, onSuccessCallback, onErrorCallback) {
         restclient.postRequest("/barcode",
             {isbn: isbn, format: format},
-            function (location, data) {
-                scannedBookResource = location;
+            function (headers, data) {
+                scannedBookResource = http.getHeader(headers, 'Location');
                 onSuccessCallback(data);
             },
             function (data, statusCode) {

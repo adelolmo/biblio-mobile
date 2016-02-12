@@ -37,7 +37,10 @@ var restclient = {
             },
             url: url,
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", window.localStorage.getItem('sessionToken'));
+                var sessionToken = window.localStorage.getItem('sessionToken');
+                if (sessionToken) {
+                    xhr.setRequestHeader("Authorization", sessionToken);
+                }
             },
             data: JSON.stringify(payload),
             error: function (xhr, status, error) {
@@ -50,7 +53,8 @@ var restclient = {
             },
             success: function (data, status, xhr) {
                 if (onSuccessCallback) {
-                    onSuccessCallback(xhr.getResponseHeader('Location'), data);
+                    //alert("success. headers: " + xhr.getAllResponseHeaders());
+                    onSuccessCallback(xhr.getAllResponseHeaders(), data);
                 }
             }
         });
