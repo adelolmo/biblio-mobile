@@ -29,7 +29,7 @@
             * Enable inline JS: add 'unsafe-inline' to default-src
     -->
     <!--<meta http-equiv="Content-Security-Policy"-->
-          <!--content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
+    <!--content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">-->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' bibliorest-adoorg.rhcloud.com">-->
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 192.168.178.29">-->
     <!--<meta http-equiv="Content-Security-Policy" content="connect-src 'self' bibliorest-adoorg.rhcloud.com 192.168.178.29:8081">-->
@@ -39,8 +39,8 @@
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
     <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css">
     <link rel="stylesheet" type="text/css" href="css/app.css">
-    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/lib/jquery.mobile-1.4.5.min.js"></script>
     <title>Biblio</title>
 </head>
 <body>
@@ -57,7 +57,8 @@
         <form id="searchBookForm">
             <input id="filterTable-input" data-type="search">
         </form>
-        <table data-role="table" id="table-books" data-filter="true" data-input="#filterTable-input" data-mode="columntoggle"
+        <table data-role="table" id="table-books" data-filter="true" data-input="#filterTable-input"
+               data-mode="columntoggle"
                class="ui-body-d ui-shadow table-stripe table-books" data-column-btn-theme="a"
                data-column-btn-text="Columns to display..." data-column-popup-theme="a">
             <thead>
@@ -69,7 +70,8 @@
             </thead>
             <tbody>
             </tbody>
-        </table>            
+        </table>
+            
     </div>
         
     <div data-role="panel" data-display="overlay" data-theme="a" id="nav-panel">
@@ -83,10 +85,13 @@
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><a href="#pageNewBook" id="buttonAdd" data-prefetch="true" data-icon="plus">New</a></li>
-                <li><button id="buttonScan" data-icon="camera">Scan</button></li>
+                <li>
+                    <button id="buttonScan" data-icon="camera">Scan</button>
+                </li>
             </ul>
         </div><!-- /navbar -->
-    </div>      
+    </div>
+      
 </div>
 
 <div data-role="page" id="pageLogin">
@@ -99,7 +104,8 @@
         <label for="loginUsername">Username:</label>
         <input data-clear-btn="true" name="loginUsername" id="loginUsername" value="" type="text">
         <label for="loginPassword">Password:</label>
-        <input data-clear-btn="true" name="loginPassword" id="loginPassword" value="" autocomplete="off" type="password">
+        <input data-clear-btn="true" name="loginPassword" id="loginPassword" value="" autocomplete="off"
+               type="password">
         <button id="buttonLoginLogin" data-prefetch="true" data-icon="carat-r">Login</button>
 
         <br>
@@ -108,9 +114,11 @@
         <label for="registerUsername">Username:</label>
         <input data-clear-btn="true" name="registerUsername" id="registerUsername" value="" type="text">
         <label for="registerPassword">Password:</label>
-        <input data-clear-btn="true" name="registerPassword" id="registerPassword" value="" autocomplete="off" type="password">
+        <input data-clear-btn="true" name="registerPassword" id="registerPassword" value="" autocomplete="off"
+               type="password">
         <label for="registerPasswordRepeat">Repeat password:</label>
-        <input data-clear-btn="true" name="registerPasswordRepeat" id="registerPasswordRepeat" value="" autocomplete="off" type="password">
+        <input data-clear-btn="true" name="registerPasswordRepeat" id="registerPasswordRepeat" value=""
+               autocomplete="off" type="password">
         <button id="buttonRegister" data-prefetch="true" data-icon="carat-r">Register</button>
     </div><!-- /content -->
 
@@ -140,16 +148,36 @@
     <div data-role="footer" data-position="fixed" data-tap-toggle="false">
         <div data-role="navbar" data-iconpos="left">
             <ul>
-                <li><button disabled="" id="buttonReturnDetailBook" data-icon="back">Return</button></li>
-                <li><button id="buttonLendDetailBook" data-icon="user">Lend</button></li>
+                <li>
+                    <button disabled="" id="buttonReturnDetailBook" data-icon="back">Return</button>
+                </li>
+                <li>
+                    <button id="buttonLendDetailBook" data-icon="user">Lend</button>
+                </li>
             </ul>
             <ul>
-                <li><a href="#" data-rel="back" data-icon="carat-l">Back</a></li>
-                <li><button id="buttonDeleteDetailBook" data-icon="delete">Delete</button></li>
-                <li><button id="buttonSaveDetailBook" data-icon="check">Save</button></li>
+                <li><a href="#pageBooks" data-icon="carat-l">Back</a></li>
+                <li><a href="#deleteBookDialog" data-icon="delete">Delete</a></li>
+                <li>
+                    <button id="buttonSaveDetailBook" data-icon="check">Save</button>
+                </li>
             </ul>
         </div>
     </div><!-- /footer -->
+</div>
+
+<div data-role="page" data-dialog="true" id="deleteBookDialog" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header">
+        <h1>Delete Book?</h1>
+    </div>
+    <div data-role="main" class="ui-content">
+        <h3 class="ui-title">Are you sure you want to delete this book?</h3>
+        <p>This action cannot be undone.</p>
+        <button id="buttonCancelDeleteBookDialog" data-prefetch="true" data-icon="cancel"
+                class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Cancel</button>
+        <button id="buttonDeleteDeleteBookDialog" data-icon="delete"
+                class="ui-btn ui-corner-all ui-shadow ui-btn-inline">Delete</button>
+    </div>
 </div>
 
 <div data-role="page" id="pageNewBook">
@@ -175,7 +203,9 @@
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><a href="#pageBooks" data-direction="reverse" data-icon="carat-l">Back</a></li>
-                <li><button id="buttonSaveNewBook" data-icon="check">Save</button></li>
+                <li>
+                    <button id="buttonSaveNewBook" data-icon="check">Save</button>
+                </li>
             </ul>
         </div>
     </div><!-- /footer -->
@@ -198,7 +228,9 @@
         <div data-role="navbar" data-iconpos="left">
             <ul>
                 <li><a href="#pageDetailBook" data-direction="reverse" data-icon="carat-l">Back</a></li>
-                <li><button id="buttonLendBook" data-icon="check">Ok</button></li>
+                <li>
+                    <button id="buttonLendBook" data-icon="check">Ok</button>
+                </li>
             </ul>
         </div>
     </div><!-- /footer -->

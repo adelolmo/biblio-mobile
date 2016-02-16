@@ -64,9 +64,6 @@ var app = {
             $('#newAuthor').val('');
             $('#newTags').val('');
         });
-        //$(document).on('pagebeforeshow', '#pageBooks', function () {
-        //alert('Index page');
-        //});
 
         // listeners for page pageDetailBook
         $("#buttonSaveDetailBook").click(function () {
@@ -74,12 +71,18 @@ var app = {
                 $('#detailAuthor').val(), $('#detailTags').val());
             $.mobile.changePage('#pageBooks');
         });
-        $("#buttonDeleteDetailBook").click(function () {
-            app.deleteBook($('#detailId').val());
-            $.mobile.changePage('#pageBooks');
-        });
         $("#buttonLendDetailBook").click(function () {
             $.mobile.changePage('#pageLendBook');
+        });
+
+        // listeners for delete dialog
+        $("#buttonCancelDeleteBookDialog").click(function () {
+            $.mobile.changePage('#pageDetailBook');
+        });
+
+        $("#buttonDeleteDeleteBookDialog").click(function () {
+            app.deleteBook($('#detailId').val());
+            $.mobile.changePage('#pageBooks');
         });
 
         // listeners for page newBook
