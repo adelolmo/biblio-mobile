@@ -29,9 +29,9 @@
     <platform name="android">
         <allow-intent href="market:*" />
 
-        <splash src="res/screen/android/splash-port-hdpi.png" density="hdpi"/>
+        <!--<splash src="res/screen/android/splash-port-hdpi.png" density="hdpi"/>-->
         <splash src="res/screen/android/splash-port-ldpi.png" density="ldpi"/>
-        <!--<splash src="res/screen/android/splash-port-mdpi.png" density="mdpi"/>-->
+        <splash src="res/screen/android/splash-port-mdpi.png" density="mdpi"/>
         <!--<splash src="res/screen/android/splash-port-xhdpi.png" density="xhdpi"/>-->
     </platform>
 
