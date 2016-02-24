@@ -7,26 +7,18 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.phonegap.plugins.barcodescanner": {
+    "cordova-plugin-dialogs": {
         "source": {
             "type": "registry",
-            "id": "com.phonegap.plugins.barcodescanner"
+            "id": "cordova-plugin-dialogs"
         },
         "is_top_level": true,
         "variables": {}
     },
-    "net.yoik.cordova.plugins.screenorientation": {
+    "cordova-plugin-screen-orientation": {
         "source": {
             "type": "registry",
-            "id": "net.yoik.cordova.plugins.screenorientation"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "org.apache.cordova.dialogs": {
-        "source": {
-            "type": "registry",
-            "id": "org.apache.cordova.dialogs"
+            "id": "cordova-plugin-screen-orientation"
         },
         "is_top_level": true,
         "variables": {}
@@ -35,6 +27,14 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-splashscreen"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "phonegap-plugin-barcodescanner": {
+        "source": {
+            "type": "registry",
+            "id": "phonegap-plugin-barcodescanner"
         },
         "is_top_level": true,
         "variables": {}
