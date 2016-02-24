@@ -3,24 +3,38 @@
         xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Biblio</name>
     <description>
-        Biblio is an application to manage your physical book library
+        How has my book? Manage your physical book library
     </description>
     <author email="andoni.delolmo@gmail.com" href="https://github.com/adelolmo/biblio-mobile">
         Andoni del Olmo
     </author>
     <content src="index.html" />
+
     <plugin name="cordova-plugin-whitelist" version="1" />
+    <!--<allow-navigation href="http://bibliorest-adoorg.rhcloud.com/*" />-->
+    <!--<allow-navigation href="http://192.168.178.29:8081/*" />-->
+
     <access origin="*" />
-    <!--<access origin="http://bibliorest-adoorg.rhcloud.com" />-->
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
+    <preference name="FadeSplashScreen" value="false"/>
+
     <platform name="android">
         <allow-intent href="market:*" />
+
+        <splash src="res/screen/android/splash-port-hdpi.png" density="hdpi"/>
+        <splash src="res/screen/android/splash-port-ldpi.png" density="ldpi"/>
+        <!--<splash src="res/screen/android/splash-port-mdpi.png" density="mdpi"/>-->
+        <!--<splash src="res/screen/android/splash-port-xhdpi.png" density="xhdpi"/>-->
     </platform>
+
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
