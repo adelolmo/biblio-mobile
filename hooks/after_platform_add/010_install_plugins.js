@@ -7,9 +7,9 @@
 // or the URL
 var pluginlist = [
     "cordova-plugin-whitelist",
-    "com.phonegap.plugins.barcodescanner",
-    "net.yoik.cordova.plugins.screenorientation",
-    "org.apache.cordova.dialogs",
+    "phonegap-plugin-barcodescanner",
+    "cordova-plugin-screen-orientation",
+    "cordova-plugin-dialogs",
     "cordova-plugin-splashscreen"
 ];
 
