@@ -1,0 +1,16 @@
+{
+  "name": "biblio",
+  "version": "1.0.0",
+  "description": "How has my book? Manage your physical book library",
+  "dependencies":
+  {
+    "cordova-icon": "^0.4.0"
+  },
+  "devDependencies":{},
+  "author": "Andoni del Olmo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/adelolmo/biblio-mobile.git"
+  }
+}

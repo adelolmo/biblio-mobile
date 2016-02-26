@@ -2,9 +2,7 @@
 
 //this hook installs all your plugins
 
-// add your plugins to this list--either
-// the identifier, the filesystem location
-// or the URL
+// add your plugins to this list--either the identifier, the filesystem location or the URL
 var pluginlist = [
     "cordova-plugin-whitelist",
     "phonegap-plugin-barcodescanner",
@@ -21,7 +19,7 @@ var sys = require('sys');
 var exec = require('child_process').exec;
 
 function puts(error, stdout, stderr) {
-    sys.puts(stdout)
+    sys.puts(stdout);
 }
 
 pluginlist.forEach(function(plug) {
