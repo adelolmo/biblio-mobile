@@ -4,7 +4,7 @@
   "description": "How has my book? Manage your physical book library",
   "dependencies":
   {
-    "cordova-icon": "^0.4.0"
+    "cordova-icon": "^0.2.0"
   },
   "devDependencies":{},
   "author": "Andoni del Olmo",
