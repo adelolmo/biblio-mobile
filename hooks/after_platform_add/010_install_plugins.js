@@ -4,11 +4,11 @@
 
 // add your plugins to this list--either the identifier, the filesystem location or the URL
 var pluginlist = [
-    "cordova-plugin-whitelist",
-    "phonegap-plugin-barcodescanner",
-    "cordova-plugin-screen-orientation",
-    "cordova-plugin-dialogs",
-    "cordova-plugin-splashscreen"
+    "cordova-plugin-whitelist@1.2.1",
+    "phonegap-plugin-barcodescanner@4.1.0",
+    "cordova-plugin-screen-orientation@1.4.0",
+    "cordova-plugin-dialogs@1.2.0",
+    "cordova-plugin-splashscreen@3.2.0"
 ];
 
 // no need to configure below
