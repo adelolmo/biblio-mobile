@@ -8,7 +8,8 @@ var pluginlist = [
     "phonegap-plugin-barcodescanner@4.1.0",
     "cordova-plugin-screen-orientation@1.4.0",
     "cordova-plugin-dialogs@1.2.0",
-    "cordova-plugin-splashscreen@3.2.0"
+    "cordova-plugin-splashscreen@3.2.0",
+    "cordova-plugin-android-permissions@0.5.1"
 ];
 
 // no need to configure below

@@ -170,11 +170,16 @@ var app = {
     },
 
     scanBook: function () {
-        cordova.plugins.barcodeScanner.scan(
-            function (result) {
-                if (!result.cancelled) {
-                    app.sendBarCode(result.text, result.format,
-                        function (data) {
+        permission.camera(cameraSuccessCallback, cameraErrorCallback);
+
+        function cameraErrorCallback(){
+            navigator.notification.alert("Camera permission is not turned on", null, "Error", "Ok")
+        }
+
+        function cameraSuccessCallback() {
+            cordova.plugins.barcodeScanner.scan(function (result) {
+                    if (!result.cancelled) {
+                        app.sendBarCode(result.text, result.format, function (data) {
                             screen.lockOrientation('portrait');
 
                             $.mobile.changePage('#pageDetailBook');
@@ -182,29 +187,27 @@ var app = {
                             app.addJsonBookToTable($('tbody'), data);
 
                             screen.unlockOrientation();
-                        },
-                        function (data, statusCode) {
+                        }, function (data, statusCode) {
                             if (statusCode == '409') {
-                                restclient.getRequest("/isbns/" + result.text,
-                                    function (data) {
-                                        screen.lockOrientation('portrait');
-                                        app.navigateBookDetail(data.id);
-                                        screen.unlockOrientation();
-                                    })
+                                restclient.getRequest("/isbns/" + result.text, function (data) {
+                                    screen.lockOrientation('portrait');
+                                    app.navigateBookDetail(data.id);
+                                    screen.unlockOrientation();
+                                })
                             } else {
-                                navigator.notification.alert("Unknown error\nStatus code: " + statusCode
-                                    + "\nError: " + data.error,
-                                    null, "Error", "Ok")
+                                navigator.notification.alert("Unknown error\nStatus code: "
+                                    + statusCode
+                                    + "\nError: "
+                                    + data.error, null, "Error", "Ok")
                             }
                         });
-                }
-            },
+                    }
+                },
 
-            function (error) {
-                navigator.notification.alert("Scanning failed: " + error,
-                    null, "Error", "Ok")
-            }
-        );
+                function (error) {
+                    navigator.notification.alert("Scanning failed: " + error, null, "Error", "Ok")
+                });
+        }
     },
 
     createBook: function (title, author, tags) {
