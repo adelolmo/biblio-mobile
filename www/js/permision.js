@@ -1,7 +1,7 @@
 var permission = {
     camera: function (cameraSuccessCallback, cameraErrorCallback) {
         var permissions = window.plugins.permissions;
-        permissions.hasPermission(checkPermissionCallback, null, permissions.CAMERA);
+        permissions.hasPermission(checkPermissionCallback, cameraErrorCallback, permissions.CAMERA);
 
         function checkPermissionCallback(status) {
             if (!status.hasPermission) {
@@ -16,6 +16,8 @@ var permission = {
                         cameraSuccessCallback();
                     }
                 }, errorCallback, permissions.CAMERA);
+            } else {
+                cameraSuccessCallback();
             }
         }
     }
