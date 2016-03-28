@@ -279,7 +279,7 @@ var app = {
         element.append('<tr id="' + jsonBook.id + '">' +
             '<td id="' + jsonBook.id + 'title">' + jsonBook.title + '</td>' +
             '<td id="' + jsonBook.id + 'author">' + jsonBook.author + '</td>' +
-            '<td id="' + jsonBook.id + 'date">' + dates.parseUnixDate(date) + '</td>' +
+            '<td id="' + jsonBook.id + 'date">' + dates.formatDate(date) + '</td>' +
             '</tr>');
     },
 
