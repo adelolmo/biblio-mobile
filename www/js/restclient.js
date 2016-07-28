@@ -17,8 +17,8 @@
  * under the License.
  */
 
-var serverUrl = "http://bibliorest-adoorg.rhcloud.com";
-//var serverUrl = "http://192.168.178.29:8080";
+// var serverUrl = "http://bibliorest-adoorg.rhcloud.com";
+var serverUrl = "http://192.168.178.29:8080";
 
 var restclient = {
     postRequest: function (resource, payload, onSuccessCallback, onErrorCallback, options) {

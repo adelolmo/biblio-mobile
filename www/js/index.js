@@ -72,6 +72,7 @@ var app = {
             $.mobile.changePage('#pageBooks');
         });
         $("#buttonLendDetailBook").click(function () {
+            biblio.back.push('#pageDetailBook');
             $.mobile.changePage('#pageLendBook');
         });
 
@@ -165,6 +166,7 @@ var app = {
         app.getBook(bookId,
             function (data) {
                 $.mobile.navigate('#pageDetailBook');
+                biblio.back.push('#pageBooks');
                 app.populateBookDetailPage(data);
             })
     },
@@ -294,3 +296,7 @@ var app = {
 };
 
 app.initialize();
+
+var biblio = {
+    back: []
+};

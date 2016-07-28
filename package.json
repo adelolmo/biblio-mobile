@@ -1,7 +1,7 @@
 {
   "name": "biblio",
   "version": "1.0.0",
-  "description": "How has my book? Manage your physical book library",
+  "description": "Who has my book? Manage your physical book library",
   "dependencies":
   {
     "cordova-icon": "^0.2.0"
