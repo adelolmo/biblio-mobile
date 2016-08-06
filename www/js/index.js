@@ -34,6 +34,11 @@ var app = {
         $("#buttonLoginLogin").click(function () {
             app.loginUser($("#loginUsername").val(), $("#loginPassword").val());
         });
+        $("#buttonGoRegister").click(function () {
+            biblio.back.push('#pageLogin');
+        });
+
+        // listeners for page register
         $("#buttonRegister").click(function () {
             var password = $("#registerPassword").val();
             var passwordRepeat = $("#registerPasswordRepeat").val();
@@ -60,6 +65,7 @@ var app = {
             app.scanBook();
         });
         $("#buttonAdd").click(function () {
+            biblio.back.push('#pageBooks');
             $('#newTitle').val('');
             $('#newAuthor').val('');
             $('#newTags').val('');
@@ -73,7 +79,7 @@ var app = {
         });
         $("#buttonLendDetailBook").click(function () {
             biblio.back.push('#pageDetailBook');
-            $.mobile.changePage('#pageLendBook');
+            // $.mobile.changePage('#pageLendBook');
         });
 
         // listeners for delete dialog
@@ -90,6 +96,13 @@ var app = {
         $("#buttonSaveNewBook").click(function () {
             app.createBook($('#newTitle').val(),
                 $('#newAuthor').val(), $('#newTags').val());
+            $.mobile.changePage('#pageBooks');
+        });
+
+        // listeners for lend book
+        $("#buttonLendBook").click(function () {
+            // app.deleteBook($('#detailId').val());
+            app.lendBook($('#detailId').val(), $('#searchPerson').val());
             $.mobile.changePage('#pageBooks');
         });
 
@@ -165,7 +178,7 @@ var app = {
     navigateBookDetail: function (bookId) {
         app.getBook(bookId,
             function (data) {
-                $.mobile.navigate('#pageDetailBook');
+                $.mobile.changePage('#pageDetailBook', {transition: "slide"});
                 biblio.back.push('#pageBooks');
                 app.populateBookDetailPage(data);
             })
@@ -174,7 +187,7 @@ var app = {
     scanBook: function () {
         permission.camera(cameraSuccessCallback, cameraErrorCallback);
 
-        function cameraErrorCallback(){
+        function cameraErrorCallback() {
             navigator.notification.alert("Camera permission is not turned on", null, "Error", "Ok")
         }
 
@@ -248,6 +261,14 @@ var app = {
             function () {
                 // TODO toast for modification success
                 $('#' + id).remove();
+            });
+    },
+
+    lendBook: function (id, person) {
+        restclient.putRequest("/books/" + id + "/lend",
+            {person: person},
+            function () {
+                // TODO toast for modification success
             });
     },
 
