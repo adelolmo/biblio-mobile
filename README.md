@@ -1,5 +1,5 @@
 # Biblio
-How has my book? Manage your physical book library
+Who has my book? Manage your physical book library
 
 ## Build
     $ npm install
